@@ -1,0 +1,14 @@
+fastapi
+uvicorn[standard]
+pydantic
+sqlalchemy
+python-multipart
+requests
+# If you use a database, uncomment one:
+asyncpg           # For PostgreSQL async
+psycopg2-binary   # For PostgreSQL sync
+# pymysql           # For MySQL
+# sqlite            # For SQLite (usually built-in)
+scikit-learn
+pandas
+numpy
