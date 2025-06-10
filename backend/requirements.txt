@@ -1,8 +1,7 @@
 Django
 djangorestframework
 psycopg2-binary   # For PostgreSQL (remove if not using)
-# pymysql         # For MySQL (uncomment if using)
-# sqlite3         # For SQLite (usually built-in, no need to add)
 scikit-learn
 pandas
 numpy
+dj-database-url
