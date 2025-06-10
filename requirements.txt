@@ -6,3 +6,4 @@ pandas
 numpy
 dj-database-url
 gunicorn
+django-cors-headers
