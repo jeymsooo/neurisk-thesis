@@ -16,9 +16,21 @@ const CONTRACTION_TYPE_OPTIONS = [
   { value: 'isotonic', label: 'Isotonic' },
 ];
 
+// Define a type for the user
+export type UserType = {
+  name: string;
+  age: number;
+  height: number;
+  weight: number;
+  training_frequency: number;
+  previous_injury: string;
+  muscle_group: string;
+  contraction_type: string;
+};
+
 type UserFormProps = {
-  initialValues: any;
-  onChange: (values: any) => void;
+  initialValues: UserType;
+  onChange: (values: UserType) => void;
   disabled?: boolean;
 };
 

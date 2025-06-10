@@ -12,12 +12,10 @@ function getInitials(name: string) {
 }
 
 function riskColor(risk: string) {
-  // All risk levels use black text and a light gray background for minimalism
   return 'text-black bg-gray-100 border border-gray-300';
 }
 
 function TrainingRegime({ risk, assignment }: { risk: string; assignment: string }) {
-  // Optionally, parse assignment into sections for better formatting
   return (
     <div className="mt-4 p-4 rounded-xl border bg-gray-50">
       <h3 className="font-bold text-lg mb-2">Training Regime ({risk.charAt(0).toUpperCase() + risk.slice(1)})</h3>
@@ -26,14 +24,22 @@ function TrainingRegime({ risk, assignment }: { risk: string; assignment: string
   );
 }
 
+// Define a type for your result items
+type SearchResult = {
+  user: { id: string; name: string };
+  risk_score?: string;
+  timestamp: string;
+  training_assignment: string;
+};
+
 export default function SearchPage() {
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<SearchResult[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [expanded, setExpanded] = useState<number | null>(null);
 
-  const handleSearch = async (e: React.FormEvent) => {
+  const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
@@ -44,8 +50,12 @@ export default function SearchPage() {
         : `${API_BASE_URL}/user_risk_scores/`;
       const response = await axios.get(url);
       setResults(response.data);
-    } catch (err: any) {
-      setError(err?.response?.data?.error || 'Search failed');
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data?.error || 'Search failed');
+      } else {
+        setError('Search failed');
+      }
     } finally {
       setLoading(false);
     }
@@ -101,4 +111,4 @@ export default function SearchPage() {
       </div>
     </div>
   );
-} 
+}
