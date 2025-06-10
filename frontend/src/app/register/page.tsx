@@ -16,15 +16,20 @@ const defaultUser = {
   contraction_type: 'isometric',
 };
 
+type SessionResult = {
+  risk_score: string;
+  training_assignment: string;
+};
+
 export default function RegisterPage() {
-  const [user, setUser] = useState(defaultUser);
+  const [user, setUser] = useState<typeof defaultUser>(defaultUser);
   const [duration, setDuration] = useState(5); // default 5 seconds
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [timer, setTimer] = useState<number>(0);
   const [timerActive, setTimerActive] = useState(false);
   const [loading, setLoading] = useState(false);
   const [processing, setProcessing] = useState(false);
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<SessionResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const [deviceId, setDeviceId] = useState(''); // New state for device ID
@@ -47,8 +52,12 @@ export default function RegisterPage() {
       setSessionId(response.data.session_id.toString());
       setTimer(duration);
       setTimerActive(true);
-    } catch (err: any) {
-      setError(err?.response?.data?.error || 'Failed to start session');
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data?.error || 'Failed to start session');
+      } else {
+        setError('Failed to start session');
+      }
     } finally {
       setLoading(false);
     }
@@ -75,8 +84,12 @@ export default function RegisterPage() {
     try {
       await axios.post(`${API_BASE_URL}/end_session/`, { session_id: sessionId, fs: 1000 });
       pollForResult(sessionId);
-    } catch (err: any) {
-      setError(err?.response?.data?.error || 'Failed to end session');
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data?.error || 'Failed to end session');
+      } else {
+        setError('Failed to end session');
+      }
       setProcessing(false);
     }
   };
@@ -101,21 +114,13 @@ export default function RegisterPage() {
           setError('Timed out waiting for result.');
           setProcessing(false);
         }
-      } catch (err: any) {
+      } catch {
         setError('Error polling for result.');
         setProcessing(false);
       }
     };
     poll();
   };
-
-  // Helper to get initials
-  function getInitials(name: string) {
-    return name
-      .split(' ')
-      .map((n) => n[0]?.toUpperCase())
-      .join('');
-  }
 
   return (
     <div className="max-w-2xl mx-auto py-8 px-4 bg-white rounded-xl">
