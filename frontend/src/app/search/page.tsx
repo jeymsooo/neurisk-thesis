@@ -24,7 +24,6 @@ function TrainingRegime({ risk, assignment }: { risk: string; assignment: string
   );
 }
 
-// Define a type for your result items
 type SearchResult = {
   user: { id: string; name: string };
   risk_score?: string;
