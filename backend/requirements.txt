@@ -1,14 +1,8 @@
-fastapi
-uvicorn[standard]
-pydantic
-sqlalchemy
-python-multipart
-requests
-# If you use a database, uncomment one:
-asyncpg           # For PostgreSQL async
-psycopg2-binary   # For PostgreSQL sync
-# pymysql           # For MySQL
-# sqlite            # For SQLite (usually built-in)
+Django
+djangorestframework
+psycopg2-binary   # For PostgreSQL (remove if not using)
+# pymysql         # For MySQL (uncomment if using)
+# sqlite3         # For SQLite (usually built-in, no need to add)
 scikit-learn
 pandas
 numpy
