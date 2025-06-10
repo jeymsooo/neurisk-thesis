@@ -87,7 +87,6 @@ export default function SearchPage() {
         {results.length === 0 && !loading && <div className="text-gray-400 col-span-2 text-center">No results.</div>}
         {results.map((item, idx) => {
           const initials = getInitials(item.user.name);
-          const risk = item.risk_score?.toLowerCase() || 'unknown';
           return (
             <div
               key={item.user.id || idx}
@@ -100,10 +99,10 @@ export default function SearchPage() {
                   <div className="font-bold text-lg text-black">{item.user.name}</div>
                   <div className="text-xs text-gray-500">{new Date(item.timestamp).toLocaleString()}</div>
                 </div>
-                <div className={`text-xl font-bold px-4 py-1 rounded-full ${riskColor(risk)}`}>{item.risk_score}</div>
+                <div className={`text-xl font-bold px-4 py-1 rounded-full ${riskColor(item.risk_score?.toLowerCase() || 'unknown')}`}>{item.risk_score}</div>
               </div>
               {expanded === idx && (
-                <TrainingRegime risk={risk} assignment={item.training_assignment} />
+                <TrainingRegime risk={item.risk_score?.toLowerCase() || 'unknown'} assignment={item.training_assignment} />
               )}
             </div>
           );
