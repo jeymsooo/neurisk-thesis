@@ -7,10 +7,11 @@ import uuid
 from django.utils import timezone
 from django.db import transaction
 from django.conf import settings
+from prediction.predictor import InjuryRiskPredictor
 
 # Import your models - adjust these imports based on your actual model structure
 try:
-    from .models import UserProfile, Session
+    from .models import UserProfile, Session, EMGData
     from .serializers import UserProfileSerializer
 except ImportError as e:
     logging.error(f"Error importing models or serializers: {e}")
@@ -152,14 +153,49 @@ class EndSessionView(APIView):
                     'message': str(e)
                 }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
-            # Here you would typically trigger your EMG data processing
-            # For now, we'll just return a success response
-            
-            return Response({
-                'message': 'Session ended successfully',
-                'session_id': session_id,
-                'status': 'processing'
-            }, status=status.HTTP_200_OK)
+            # Prediction logic
+            try:
+                emg_obj = EMGData.objects.filter(session=session).last()
+                if not emg_obj:
+                    logger.warning(f"No EMG data found for session: {session_id}")
+                    return Response({'error': 'No EMG data found for this session'}, status=status.HTTP_400_BAD_REQUEST)
+                
+                emg_signal = emg_obj.raw_data
+                user = session.user
+                user_inputs = {
+                    "age": user.age,
+                    "height": user.height,
+                    "weight": user.weight,
+                    "bmi": user.weight / ((user.height / 100) ** 2),
+                    "training_frequency": user.training_frequency,
+                    "previous_injury": user.previous_injury,
+                    "contraction_type": user.contraction_type,
+                }
+                muscle_group = user.muscle_group
+                
+                predictor = InjuryRiskPredictor()
+                risk_level = predictor.predict(user_inputs, emg_signal, muscle_group)
+
+                # Save risk_level to EMGData
+                emg_obj.risk_level = risk_level
+                emg_obj.save()
+                
+                session.status = "completed"
+                session.save()
+                
+                logger.info(f"Session {session_id} processed with risk level: {risk_level}")
+                
+                return Response({
+                    "session_id": session_id,
+                    "risk_level": risk_level,
+                    "status": "completed"
+                }, status=status.HTTP_200_OK)
+            except Exception as e:
+                logger.error(f"Error in prediction pipeline: {str(e)}")
+                return Response({
+                    'error': 'Error in prediction pipeline',
+                    'message': str(e)
+                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
         except Exception as e:
             logger.error(f"Unexpected error in EndSessionView: {str(e)}")
@@ -187,15 +223,11 @@ class SessionStatusView(APIView):
                         logger.warning(f"Session not found: {session_id}")
                         return Response({'error': 'Session not found'}, status=status.HTTP_404_NOT_FOUND)
                     
-                    # For demonstration, we'll return a mock result
-                    # In a real application, you would check the actual status
-                    # and return the appropriate result
-                    
-                    if session.status == 'completed':
+                    if session.status == "completed":
+                        emg_obj = EMGData.objects.filter(session=session).last()
+                        risk_level = getattr(emg_obj, "risk_level", None)
                         result = {
-                            'risk_level': 'medium',  # Example value
-                            'risk_score': 65,  # Example value
-                            'training_assignment': 'Recommended exercises: Hamstring stretches, quad strengthening'
+                            "risk_level": risk_level or "medium"
                         }
                     else:
                         result = None
@@ -209,7 +241,6 @@ class SessionStatusView(APIView):
                     }, status=status.HTTP_200_OK)
                 else:
                     logger.warning("Session.objects not available, using mock response")
-                    # Return a mock response for testing
                     return Response({
                         'session_id': session_id,
                         'status': 'completed',

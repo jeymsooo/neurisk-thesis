@@ -52,6 +52,7 @@ class EMGData(models.Model):
     session = models.ForeignKey('Session', on_delete=models.CASCADE, related_name="emg_data", null=True, blank=True)
     raw_data = models.JSONField(help_text="Raw EMG signal data as a list of values")
     timestamp = models.DateTimeField(auto_now_add=True)
+    risk_level = models.CharField(max_length=20, null=True, blank=True)
 
     def __str__(self):
         return f"EMGData for {self.user.name} at {self.timestamp}"
