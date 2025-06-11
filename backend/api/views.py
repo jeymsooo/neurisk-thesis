@@ -89,10 +89,8 @@ class StartSessionView(APIView):
                 
                 # Create new session
                 try:
-                    session_id = str(uuid.uuid4())
                     if hasattr(Session, 'objects') and Session.objects:
                         session = Session.objects.create(
-                            id=session_id,
                             user=user, 
                             duration=duration, 
                             status='pending', 
