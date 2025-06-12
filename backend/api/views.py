@@ -263,3 +263,24 @@ class SessionStatusView(APIView):
                 'error': 'Internal server error',
                 'message': str(e)
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class UploadEMGView(APIView):
+    def post(self, request, format=None):
+        try:
+            session_id = request.data.get("session_id")
+            emg_data = request.data.get("emg_data")
+            if not session_id or not emg_data:
+                return Response({"error": "Missing session_id or emg_data"}, status=status.HTTP_400_BAD_REQUEST)
+            session = Session.objects.filter(id=session_id).first()
+            if not session:
+                return Response({"error": "Session not found"}, status=status.HTTP_404_NOT_FOUND)
+            user = session.user
+            # Save EMG data
+            EMGData.objects.create(
+                user=user,
+                session=session,
+                raw_data=emg_data
+            )
+            return Response({"message": "EMG data uploaded successfully"}, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
