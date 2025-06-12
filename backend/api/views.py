@@ -12,7 +12,7 @@ from prediction.predictor import InjuryRiskPredictor
 
 # Import your models - adjust these imports based on your actual model structure
 try:
-    from .models import UserProfile, Session, EMGData
+    from .models import UserProfile, Session, EMGData, User  # Adjust import if needed
     from .serializers import UserProfileSerializer
 except ImportError as e:
     logging.error(f"Error importing models or serializers: {e}")
@@ -296,3 +296,21 @@ def latest_session_id(request):
         return Response({'session_id': session.id})
     else:
         return Response({'error': 'No active session found for this device'}, status=404)
+
+@api_view(['GET'])
+def search_users(request):
+    query = request.GET.get('query', '')
+    users = User.objects.filter(name__icontains=query) if query else User.objects.all()
+    results = []
+    for user in users:
+        # Get the latest EMGData for this user (if any)
+        emg = EMGData.objects.filter(user=user).order_by('-timestamp').first()
+        risk_level = emg.risk_level if emg and emg.risk_level else None
+        results.append({
+            "id": user.id,
+            "name": user.name,
+            "age": user.age,
+            # Add other fields as needed
+            "risk_level": risk_level,
+        })
+    return Response({"results": results})
