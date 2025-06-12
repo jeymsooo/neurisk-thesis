@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.decorators import api_view
 import logging
 import json
 import uuid
@@ -269,7 +270,7 @@ class UploadEMGView(APIView):
         try:
             session_id = request.data.get("session_id")
             emg_data = request.data.get("emg_data")
-            if not session_id or not emg_data:
+            if not session_id or emg_data is None:
                 return Response({"error": "Missing session_id or emg_data"}, status=status.HTTP_400_BAD_REQUEST)
             session = Session.objects.filter(id=session_id).first()
             if not session:
@@ -284,3 +285,14 @@ class UploadEMGView(APIView):
             return Response({"message": "EMG data uploaded successfully"}, status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+def latest_session_id(request):
+    device_id = request.GET.get('device_id')
+    if not device_id:
+        return Response({'error': 'device_id is required'}, status=400)
+    session = Session.objects.filter(device_id=device_id, is_active=True).order_by('-created_at').first()
+    if session:
+        return Response({'session_id': session.id})
+    else:
+        return Response({'error': 'No active session found for this device'}, status=404)
