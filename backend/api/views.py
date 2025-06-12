@@ -235,6 +235,14 @@ class UploadEMGView(APIView):
             session = Session.objects.filter(id=session_id).first()
             if not session:
                 return Response({"error": "Session not found"}, status=status.HTTP_404_NOT_FOUND)
+            if not session.is_active:
+                return Response({"error": "Session is not active"}, status=status.HTTP_403_FORBIDDEN)
+            # Optional: Check if session duration has passed
+            if session.started_at and session.duration:
+                from django.utils import timezone
+                elapsed = (timezone.now() - session.started_at).total_seconds()
+                if elapsed > session.duration:
+                    return Response({"error": "Session duration has ended"}, status=status.HTTP_403_FORBIDDEN)
             user = session.user
             # Save EMG data
             EMGData.objects.create(
@@ -265,12 +273,19 @@ def search_users(request):
     for user in users:
         # Get the latest EMGData for this user (if any)
         emg = EMGData.objects.filter(user=user).order_by('-timestamp').first()
-        risk_level = emg.risk_level if emg and emg.risk_level else None
+        risk_level = None
+        if emg:
+            # Get the latest FeatureSet for this EMGData
+            feature_set = emg.feature_sets.order_by('-timestamp').first()
+            if feature_set:
+                # Get the latest RiskScore for this FeatureSet
+                risk_score = feature_set.risk_scores.order_by('-timestamp').first()
+                if risk_score:
+                    risk_level = risk_score.level
         results.append({
             "id": user.id,
             "name": user.name,
             "age": user.age,
-            # Add other fields as needed
             "risk_level": risk_level,
         })
     return Response({"results": results})
