@@ -10,29 +10,8 @@ from django.db import transaction
 from django.conf import settings
 from prediction.predictor import InjuryRiskPredictor
 
-# Import your models - adjust these imports based on your actual model structure
-try:
-    from .models import UserProfile, Session, EMGData, User  # Adjust import if needed
-    from .serializers import UserProfileSerializer
-except ImportError as e:
-    logging.error(f"Error importing models or serializers: {e}")
-    # Define fallback classes to prevent crashes
-    class UserProfile:
-        pass
-    
-    class Session:
-        objects = None
-        
-    class UserProfileSerializer:
-        def __init__(self, *args, **kwargs):
-            pass
-        
-        def is_valid(self):
-            return False
-        
-        @property
-        def errors(self):
-            return {"error": "Serializer not properly loaded"}
+from .models import UserProfile, Session, EMGData
+from .serializers import UserProfileSerializer
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -52,11 +31,11 @@ class StartSessionView(APIView):
             if not user_data:
                 logger.warning("Missing user data in request")
                 return Response({'error': 'user data is required'}, status=status.HTTP_400_BAD_REQUEST)
-                
+            
             if not duration:
                 logger.warning("Missing duration in request")
                 return Response({'error': 'duration is required'}, status=status.HTTP_400_BAD_REQUEST)
-                
+            
             if not device_id:
                 logger.warning("Missing device_id in request")
                 return Response({'error': 'device_id is required'}, status=status.HTTP_400_BAD_REQUEST)
@@ -83,27 +62,23 @@ class StartSessionView(APIView):
                 
                 # Deactivate previous sessions for this device
                 try:
-                    if Session.objects:  # Check if Session.objects exists
-                        Session.objects.filter(device_id=device_id, is_active=True).update(is_active=False)
-                        logger.info(f"Deactivated previous sessions for device: {device_id}")
+                    Session.objects.filter(device_id=device_id, is_active=True).update(is_active=False)
+                    logger.info(f"Deactivated previous sessions for device: {device_id}")
                 except Exception as e:
                     logger.error(f"Error deactivating previous sessions: {str(e)}")
                 
                 # Create new session
                 try:
-                    if hasattr(Session, 'objects') and Session.objects:
-                        session = Session.objects.create(
-                            user=user, 
-                            duration=duration, 
-                            status='pending', 
-                            device_id=device_id, 
-                            is_active=True,
-                            created_at=timezone.now()
-                        )
-                        logger.info(f"Session created successfully with ID: {session.id}")
-                        session_id = session.id
-                    else:
-                        logger.warning("Session.objects not available, using mock session ID")
+                    session = Session.objects.create(
+                        user=user, 
+                        duration=duration, 
+                        status='pending', 
+                        device_id=device_id, 
+                        is_active=True,
+                        created_at=timezone.now()
+                    )
+                    logger.info(f"Session created successfully with ID: {session.id}")
+                    session_id = session.id
                 except Exception as e:
                     logger.error(f"Error creating session: {str(e)}")
                     return Response({
@@ -134,19 +109,16 @@ class EndSessionView(APIView):
                 return Response({'error': 'session_id is required'}, status=status.HTTP_400_BAD_REQUEST)
             
             try:
-                if hasattr(Session, 'objects') and Session.objects:
-                    session = Session.objects.filter(id=session_id).first()
-                    if not session:
-                        logger.warning(f"Session not found: {session_id}")
-                        return Response({'error': 'Session not found'}, status=status.HTTP_404_NOT_FOUND)
-                    
-                    session.is_active = False
-                    session.status = 'processing'
-                    session.ended_at = timezone.now()
-                    session.save()
-                    logger.info(f"Session {session_id} marked as ended and processing")
-                else:
-                    logger.warning("Session.objects not available, using mock response")
+                session = Session.objects.filter(id=session_id).first()
+                if not session:
+                    logger.warning(f"Session not found: {session_id}")
+                    return Response({'error': 'Session not found'}, status=status.HTTP_404_NOT_FOUND)
+                
+                session.is_active = False
+                session.status = 'processing'
+                session.ended_at = timezone.now()
+                session.save()
+                logger.info(f"Session {session_id} marked as ended and processing")
             except Exception as e:
                 logger.error(f"Error updating session: {str(e)}")
                 return Response({
@@ -218,39 +190,27 @@ class SessionStatusView(APIView):
                 return Response({'error': 'session_id is required'}, status=status.HTTP_400_BAD_REQUEST)
             
             try:
-                if hasattr(Session, 'objects') and Session.objects:
-                    session = Session.objects.filter(id=session_id).first()
-                    if not session:
-                        logger.warning(f"Session not found: {session_id}")
-                        return Response({'error': 'Session not found'}, status=status.HTTP_404_NOT_FOUND)
-                    
-                    if session.status == "completed":
-                        emg_obj = EMGData.objects.filter(session=session).last()
-                        risk_level = getattr(emg_obj, "risk_level", None)
-                        result = {
-                            "risk_level": risk_level or "medium"
-                        }
-                    else:
-                        result = None
-                        
-                    logger.info(f"Retrieved status for session {session_id}: {session.status}")
-                    
-                    return Response({
-                        'session_id': session_id,
-                        'status': session.status,
-                        'result': result
-                    }, status=status.HTTP_200_OK)
+                session = Session.objects.filter(id=session_id).first()
+                if not session:
+                    logger.warning(f"Session not found: {session_id}")
+                    return Response({'error': 'Session not found'}, status=status.HTTP_404_NOT_FOUND)
+                
+                if session.status == "completed":
+                    emg_obj = EMGData.objects.filter(session=session).last()
+                    risk_level = getattr(emg_obj, "risk_level", None)
+                    result = {
+                        "risk_level": risk_level or "medium"
+                    }
                 else:
-                    logger.warning("Session.objects not available, using mock response")
-                    return Response({
-                        'session_id': session_id,
-                        'status': 'completed',
-                        'result': {
-                            'risk_level': 'medium',
-                            'risk_score': 65,
-                            'training_assignment': 'Recommended exercises: Hamstring stretches, quad strengthening'
-                        }
-                    }, status=status.HTTP_200_OK)
+                    result = None
+                    
+                logger.info(f"Retrieved status for session {session_id}: {session.status}")
+                
+                return Response({
+                    'session_id': session_id,
+                    'status': session.status,
+                    'result': result
+                }, status=status.HTTP_200_OK)
             except Exception as e:
                 logger.error(f"Error retrieving session: {str(e)}")
                 return Response({
@@ -300,7 +260,7 @@ def latest_session_id(request):
 @api_view(['GET'])
 def search_users(request):
     query = request.GET.get('query', '')
-    users = User.objects.filter(name__icontains=query) if query else User.objects.all()
+    users = UserProfile.objects.filter(name__icontains=query) if query else UserProfile.objects.all()
     results = []
     for user in users:
         # Get the latest EMGData for this user (if any)
