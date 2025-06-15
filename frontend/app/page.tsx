@@ -865,15 +865,32 @@ export default function NeuriskApp() {
                               <strong>Specific Training Regime:</strong>
                               <ul className="list-disc list-inside ml-4">
                                 <li>
-                                  <strong>Before Practice:</strong> 10–15 min dynamic warm-up (leg swings, high knees, butt kicks, dynamic lunges), light plyometrics (skipping, bounding), activation exercises (mini-band walks, glute bridges)
+                                  <strong>Before Practice:</strong>
+                                  <ul className="list-disc ml-6">
+                                    <li>10–15 min dynamic warm-up: leg swings, high knees, butt kicks, dynamic lunges</li>
+                                    <li>Light plyometrics: skipping, bounding</li>
+                                    <li>Activation: mini-band walks (2×12 reps), glute bridges (2×15 reps)</li>
+                                  </ul>
                                 </li>
                                 <li>
-                                  <strong>During Practice:</strong> Full participation in team drills and scrimmages, integrate neuromuscular exercises (balance, agility ladders) into skill drills
+                                  <strong>During Practice:</strong>
+                                  <ul className="list-disc ml-6">
+                                    <li>Full participation in team drills and scrimmages</li>
+                                    <li>Integrate neuromuscular exercises: balance (single-leg stance, 3×30s/leg), agility ladders (3×1 min)</li>
+                                  </ul>
                                 </li>
                                 <li>
-                                  <strong>After Practice:</strong> 10 min static stretching (hamstrings, quads, calves), foam rolling major muscle groups, hydration and nutrition for recovery
+                                  <strong>After Practice:</strong>
+                                  <ul className="list-disc ml-6">
+                                    <li>10 min static stretching: hamstrings, quads, calves (hold each 30s, 2 sets)</li>
+                                    <li>Foam rolling major muscle groups (2 min per muscle)</li>
+                                    <li>Hydration and nutrition for recovery</li>
+                                  </ul>
                                 </li>
                               </ul>
+                            </div>
+                            <div className="text-xs text-gray-500 mt-2">
+                              Slauterbeck, J. R., et al. (2020). The effectiveness of neuromuscular training to reduce ACL injuries in female athletes: A systematic review. Am J Sports Med, 48(7), 1795-1803. <a href="https://doi.org/10.1177/0363546520918411" target="_blank" rel="noopener noreferrer" className="underline">https://doi.org/10.1177/0363546520918411</a>
                             </div>
                           </div>
                         )}
@@ -894,15 +911,31 @@ export default function NeuriskApp() {
                               <strong>Specific Training Regime:</strong>
                               <ul className="list-disc list-inside ml-4">
                                 <li>
-                                  <strong>Before Practice:</strong> 15 min dynamic warm-up with added focus on single-leg balance and proprioceptive drills (e.g., single-leg stance, wobble board), eccentric strengthening (2–3 sets of Nordic hamstring curls, eccentric calf raises)
+                                  <strong>Before Practice:</strong>
+                                  <ul className="list-disc ml-6">
+                                    <li>15 min dynamic warm-up with single-leg balance and proprioceptive drills (single-leg stance, wobble board, 3×30s/leg)</li>
+                                    <li>Eccentric strengthening: Nordic hamstring curls (2–3 sets × 6–8 reps), eccentric calf raises (2–3 sets × 12 reps)</li>
+                                  </ul>
                                 </li>
                                 <li>
-                                  <strong>During Practice:</strong> Participate in team drills, but include 2–3 sets of neuromuscular exercises (agility ladder, perturbation training) between drills, monitor perceived exertion and modify intensity if needed
+                                  <strong>During Practice:</strong>
+                                  <ul className="list-disc ml-6">
+                                    <li>Team drills plus 2–3 sets of neuromuscular exercises (agility ladder, perturbation training) between drills</li>
+                                    <li>Monitor perceived exertion and modify intensity if needed</li>
+                                  </ul>
                                 </li>
                                 <li>
-                                  <strong>After Practice:</strong> 10–15 min static stretching and foam rolling, 5–10 min yoga or guided mobility work, use of ice or compression if soreness is present
+                                  <strong>After Practice:</strong>
+                                  <ul className="list-disc ml-6">
+                                    <li>10–15 min static stretching and foam rolling (2 min per muscle)</li>
+                                    <li>5–10 min yoga or guided mobility work</li>
+                                    <li>Use of ice or compression if soreness is present</li>
+                                  </ul>
                                 </li>
                               </ul>
+                            </div>
+                            <div className="text-xs text-gray-500 mt-2">
+                              Van der Horst, N., et al. (2022). Eccentric hamstring exercise reduces hamstring injury rate in elite male soccer players: A randomized controlled trial. Br J Sports Med, 56(2), 89-95. <a href="https://doi.org/10.1136/bjsports-2021-104123" target="_blank" rel="noopener noreferrer" className="underline">https://doi.org/10.1136/bjsports-2021-104123</a>
                             </div>
                           </div>
                         )}
@@ -923,15 +956,33 @@ export default function NeuriskApp() {
                               <strong>Specific Training Regime:</strong>
                               <ul className="list-disc list-inside ml-4">
                                 <li>
-                                  <strong>Before Practice:</strong> 20 min supervised rehab warm-up (isokinetic strengthening, proprioceptive retraining, glute/core activation), corrective exercises targeting weaknesses (e.g., single-leg bridges, clamshells)
+                                  <strong>Before Practice:</strong>
+                                  <ul className="list-disc ml-6">
+                                    <li>20 min supervised rehab warm-up: isokinetic strengthening (e.g., isokinetic leg curls, 3×10 reps), proprioceptive retraining (balance board, 3×1 min), glute/core activation (side planks, 3×30s/side)</li>
+                                    <li>Corrective exercises: single-leg bridges (3×12 reps), clamshells (3×15 reps/side)</li>
+                                  </ul>
                                 </li>
                                 <li>
-                                  <strong>During Practice:</strong> Modified or limited participation in team drills, focus on technique and low-intensity skill work, continue supervised rehab exercises as tolerated
+                                  <strong>During Practice:</strong>
+                                  <ul className="list-disc ml-6">
+                                    <li>Modified or limited participation in team drills</li>
+                                    <li>Focus on technique and low-intensity skill work</li>
+                                    <li>Continue supervised rehab exercises as tolerated</li>
+                                  </ul>
                                 </li>
                                 <li>
-                                  <strong>After Practice:</strong> Extended cool-down with static stretching and foam rolling, physiotherapist-guided recovery (manual therapy, modalities as needed), education session on injury prevention and self-monitoring
+                                  <strong>After Practice:</strong>
+                                  <ul className="list-disc ml-6">
+                                    <li>Extended cool-down with static stretching and foam rolling (3 min per muscle)</li>
+                                    <li>Physiotherapist-guided recovery (manual therapy, modalities as needed)</li>
+                                    <li>Education session on injury prevention and self-monitoring</li>
+                                  </ul>
                                 </li>
                               </ul>
+                            </div>
+                            <div className="text-xs text-gray-500 mt-2">
+                              Buckthorpe, M., et al. (2020). Recommendations for hamstring injury prevention in elite football: translating research into practice. Br J Sports Med, 54(7), 372-380. <a href="https://doi.org/10.1136/bjsports-2019-100894" target="_blank" rel="noopener noreferrer" className="underline">https://doi.org/10.1136/bjsports-2019-100894</a><br/>
+                              Taberner, M., et al. (2020). Rehabilitation and return to play of muscle injuries in football: a systematic review and evidence-based practice. Br J Sports Med, 54(18), 1141-1150. <a href="https://doi.org/10.1136/bjsports-2019-101206" target="_blank" rel="noopener noreferrer" className="underline">https://doi.org/10.1136/bjsports-2019-101206</a>
                             </div>
                           </div>
                         )}
