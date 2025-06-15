@@ -848,27 +848,93 @@ export default function NeuriskApp() {
                       {/* Additional recommendations based on risk level */}
                       <div>
                         <h4 className="text-lg font-semibold text-gray-800 mb-3">Additional Recommendations:</h4>
-                        <ul className="list-disc list-inside space-y-1 text-gray-700">
-                          {result.risk_level === "low" ? (
-                            <>
-                              <li>Continue regular strength and conditioning</li>
-                              <li>Emphasize warm-up, cool-down, and recovery</li>
-                              <li>Monitor training load</li>
-                            </>
-                          ) : result.risk_level === "medium" ? (
-                            <>
-                              <li>Add targeted neuromuscular and eccentric strengthening</li>
-                              <li>Monitor fatigue and muscle imbalances</li>
-                              <li>Integrate recovery modalities</li>
-                            </>
-                          ) : (
-                            <>
-                              <li>Supervised rehabilitation with a physiotherapist</li>
-                              <li>Individualized corrective exercise program</li>
-                              <li>Gradual return-to-play protocol</li>
-                            </>
-                          )}
-                        </ul>
+                        {result.risk_level === "low" && (
+                          <div className="space-y-2 text-gray-700">
+                            <div>
+                              <strong>Objective:</strong> Maintain optimal musculoskeletal health and prevent injury.
+                            </div>
+                            <div>
+                              <strong>Recommended Interventions:</strong>
+                              <ul className="list-disc list-inside ml-4">
+                                <li>Continue regular strength and conditioning.</li>
+                                <li>Emphasize warm-up, cool-down, and recovery.</li>
+                                <li>Monitor training load.</li>
+                              </ul>
+                            </div>
+                            <div>
+                              <strong>Specific Training Regime:</strong>
+                              <ul className="list-disc list-inside ml-4">
+                                <li>
+                                  <strong>Before Practice:</strong> 10–15 min dynamic warm-up (leg swings, high knees, butt kicks, dynamic lunges), light plyometrics (skipping, bounding), activation exercises (mini-band walks, glute bridges)
+                                </li>
+                                <li>
+                                  <strong>During Practice:</strong> Full participation in team drills and scrimmages, integrate neuromuscular exercises (balance, agility ladders) into skill drills
+                                </li>
+                                <li>
+                                  <strong>After Practice:</strong> 10 min static stretching (hamstrings, quads, calves), foam rolling major muscle groups, hydration and nutrition for recovery
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        )}
+                        {result.risk_level === "medium" && (
+                          <div className="space-y-2 text-gray-700">
+                            <div>
+                              <strong>Objective:</strong> Address early signs of fatigue or imbalance and prevent progression to high risk.
+                            </div>
+                            <div>
+                              <strong>Recommended Interventions:</strong>
+                              <ul className="list-disc list-inside ml-4">
+                                <li>Add targeted neuromuscular and eccentric strengthening.</li>
+                                <li>Monitor fatigue and muscle imbalances.</li>
+                                <li>Integrate recovery modalities.</li>
+                              </ul>
+                            </div>
+                            <div>
+                              <strong>Specific Training Regime:</strong>
+                              <ul className="list-disc list-inside ml-4">
+                                <li>
+                                  <strong>Before Practice:</strong> 15 min dynamic warm-up with added focus on single-leg balance and proprioceptive drills (e.g., single-leg stance, wobble board), eccentric strengthening (2–3 sets of Nordic hamstring curls, eccentric calf raises)
+                                </li>
+                                <li>
+                                  <strong>During Practice:</strong> Participate in team drills, but include 2–3 sets of neuromuscular exercises (agility ladder, perturbation training) between drills, monitor perceived exertion and modify intensity if needed
+                                </li>
+                                <li>
+                                  <strong>After Practice:</strong> 10–15 min static stretching and foam rolling, 5–10 min yoga or guided mobility work, use of ice or compression if soreness is present
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        )}
+                        {result.risk_level === "high" && (
+                          <div className="space-y-2 text-gray-700">
+                            <div>
+                              <strong>Objective:</strong> Mitigate injury risk, address deficits, and ensure safe return to play.
+                            </div>
+                            <div>
+                              <strong>Recommended Interventions:</strong>
+                              <ul className="list-disc list-inside ml-4">
+                                <li>Supervised rehabilitation with a physiotherapist.</li>
+                                <li>Individualized corrective exercise program.</li>
+                                <li>Gradual return-to-play protocol.</li>
+                              </ul>
+                            </div>
+                            <div>
+                              <strong>Specific Training Regime:</strong>
+                              <ul className="list-disc list-inside ml-4">
+                                <li>
+                                  <strong>Before Practice:</strong> 20 min supervised rehab warm-up (isokinetic strengthening, proprioceptive retraining, glute/core activation), corrective exercises targeting weaknesses (e.g., single-leg bridges, clamshells)
+                                </li>
+                                <li>
+                                  <strong>During Practice:</strong> Modified or limited participation in team drills, focus on technique and low-intensity skill work, continue supervised rehab exercises as tolerated
+                                </li>
+                                <li>
+                                  <strong>After Practice:</strong> Extended cool-down with static stretching and foam rolling, physiotherapist-guided recovery (manual therapy, modalities as needed), education session on injury prevention and self-monitoring
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        )}
                       </div>
 
                       {/* Action Buttons */}
