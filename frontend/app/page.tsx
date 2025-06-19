@@ -848,45 +848,50 @@ export default function NeuriskApp() {
                       {/* Additional recommendations based on risk level */}
                       <div>
                         <h4 className="text-lg font-semibold text-gray-800 mb-3">Additional Recommendations:</h4>
+                        {/* Age-specific note, always shown if user is over 40 */}
+                        {formData.age && Number(formData.age) > 40 && (
+                          <div className="text-yellow-700 mb-2">
+                            <strong>Note:</strong> As you are over 40, we recommend longer warm-ups, lower-impact exercises, and extra focus on balance and flexibility. See: Garber et al., 2011 (ACSM), WHO 2020.
+                            <ul className="list-disc ml-6 mt-2">
+                              <li><strong>Warm-up:</strong> 15 min total. Include dynamic stretching (leg swings, arm circles), brisk walking or cycling (5 min), and balance drills (single-leg stance, 3×30s/leg).</li>
+                              <li><strong>Strength:</strong> Use moderate resistance, 2–3 sets of 8–12 reps per exercise. Focus on form and avoid ballistic movements.</li>
+                              <li><strong>Flexibility:</strong> Static stretching after exercise, hold each stretch for 30–60s, 2 sets per muscle group.</li>
+                              <li><strong>Balance:</strong> Add exercises like tandem walking (2×10 meters), heel-to-toe walking (2×10 meters), and standing on one leg (3×30s/leg).</li>
+                              <li><strong>Cool-down:</strong> 10 min, including gentle stretching and deep breathing.</li>
+                            </ul>
+                          </div>
+                        )}
                         {result.risk_level === "low" && (
                           <div className="space-y-2 text-gray-700">
                             <div>
                               <strong>Objective:</strong> Maintain optimal musculoskeletal health and prevent injury.
                             </div>
                             <div>
-                              <strong>Recommended Interventions:</strong>
-                              <ul className="list-disc list-inside ml-4">
-                                <li>Continue regular strength and conditioning.</li>
-                                <li>Emphasize warm-up, cool-down, and recovery.</li>
-                                <li>Monitor training load.</li>
+                              <strong>Warm-up (10–15 min):</strong>
+                              <ul className="list-disc ml-6">
+                                <li>Dynamic leg swings: <strong>2 sets × 10 reps each leg</strong></li>
+                                <li>High knees: <strong>2 sets × 20 meters</strong></li>
+                                <li>Butt kicks: <strong>2 sets × 20 meters</strong></li>
+                                <li>Walking lunges: <strong>2 sets × 10 reps each leg</strong></li>
+                                <li>Mini-band lateral walks: <strong>2 sets × 12 steps each direction</strong></li>
                               </ul>
                             </div>
                             <div>
-                              <strong>Specific Training Regime:</strong>
-                              <ul className="list-disc list-inside ml-4">
-                                <li>
-                                  <strong>Before Practice:</strong>
-                                  <ul className="list-disc ml-6">
-                                    <li>10–15 min dynamic warm-up: leg swings, high knees, butt kicks, dynamic lunges</li>
-                                    <li>Light plyometrics: skipping, bounding</li>
-                                    <li>Activation: mini-band walks (2×12 reps), glute bridges (2×15 reps)</li>
-                                  </ul>
-                                </li>
-                                <li>
-                                  <strong>During Practice:</strong>
-                                  <ul className="list-disc ml-6">
-                                    <li>Full participation in team drills and scrimmages</li>
-                                    <li>Integrate neuromuscular exercises: balance (single-leg stance, 3×30s/leg), agility ladders (3×1 min)</li>
-                                  </ul>
-                                </li>
-                                <li>
-                                  <strong>After Practice:</strong>
-                                  <ul className="list-disc ml-6">
-                                    <li>10 min static stretching: hamstrings, quads, calves (hold each 30s, 2 sets)</li>
-                                    <li>Foam rolling major muscle groups (2 min per muscle)</li>
-                                    <li>Hydration and nutrition for recovery</li>
-                                  </ul>
-                                </li>
+                              <strong>Main Session:</strong>
+                              <ul className="list-disc ml-6">
+                                <li>Bodyweight squats: <strong>3 sets × 12 reps</strong></li>
+                                <li>Push-ups: <strong>3 sets × 10 reps</strong></li>
+                                <li>Glute bridges: <strong>3 sets × 15 reps</strong></li>
+                                <li>Single-leg stance (balance): <strong>3 sets × 30s each leg</strong></li>
+                                <li>Tandem walking (balance): <strong>2 sets × 10 meters</strong></li>
+                                <li>Agility ladder drills: <strong>3 sets × 1 min</strong></li>
+                              </ul>
+                            </div>
+                            <div>
+                              <strong>Cool-down (10 min):</strong>
+                              <ul className="list-disc ml-6">
+                                <li>Static stretching (hamstrings, quads, calves): <strong>2 sets × 30s each</strong></li>
+                                <li>Foam rolling major muscle groups: <strong>2 min per muscle</strong></li>
                               </ul>
                             </div>
                             <div className="text-xs text-gray-500 mt-2">
@@ -900,38 +905,28 @@ export default function NeuriskApp() {
                               <strong>Objective:</strong> Address early signs of fatigue or imbalance and prevent progression to high risk.
                             </div>
                             <div>
-                              <strong>Recommended Interventions:</strong>
-                              <ul className="list-disc list-inside ml-4">
-                                <li>Add targeted neuromuscular and eccentric strengthening.</li>
-                                <li>Monitor fatigue and muscle imbalances.</li>
-                                <li>Integrate recovery modalities.</li>
+                              <strong>Warm-up (15 min):</strong>
+                              <ul className="list-disc ml-6">
+                                <li>Dynamic warm-up as above, plus:</li>
+                                <li>Single-leg balance on wobble board: <strong>3 sets × 30s each leg</strong></li>
+                                <li>Walking lunges with torso twist: <strong>2 sets × 10 reps each leg</strong></li>
                               </ul>
                             </div>
                             <div>
-                              <strong>Specific Training Regime:</strong>
-                              <ul className="list-disc list-inside ml-4">
-                                <li>
-                                  <strong>Before Practice:</strong>
-                                  <ul className="list-disc ml-6">
-                                    <li>15 min dynamic warm-up with single-leg balance and proprioceptive drills (single-leg stance, wobble board, 3×30s/leg)</li>
-                                    <li>Eccentric strengthening: Nordic hamstring curls (2–3 sets × 6–8 reps), eccentric calf raises (2–3 sets × 12 reps)</li>
-                                  </ul>
-                                </li>
-                                <li>
-                                  <strong>During Practice:</strong>
-                                  <ul className="list-disc ml-6">
-                                    <li>Team drills plus 2–3 sets of neuromuscular exercises (agility ladder, perturbation training) between drills</li>
-                                    <li>Monitor perceived exertion and modify intensity if needed</li>
-                                  </ul>
-                                </li>
-                                <li>
-                                  <strong>After Practice:</strong>
-                                  <ul className="list-disc ml-6">
-                                    <li>10–15 min static stretching and foam rolling (2 min per muscle)</li>
-                                    <li>5–10 min yoga or guided mobility work</li>
-                                    <li>Use of ice or compression if soreness is present</li>
-                                  </ul>
-                                </li>
+                              <strong>Main Session:</strong>
+                              <ul className="list-disc ml-6">
+                                <li>Nordic hamstring curls (eccentric): <strong>3 sets × 6–8 reps</strong></li>
+                                <li>Eccentric calf raises: <strong>3 sets × 12 reps</strong></li>
+                                <li>Y-balance reach (balance): <strong>3 sets × 5 reps each leg</strong></li>
+                                <li>Agility ladder drills: <strong>3 sets × 1 min</strong></li>
+                                <li>Perturbation training (e.g., partner pushes during balance): <strong>2 sets × 1 min</strong></li>
+                              </ul>
+                            </div>
+                            <div>
+                              <strong>Cool-down (10–15 min):</strong>
+                              <ul className="list-disc ml-6">
+                                <li>Static stretching and foam rolling: <strong>2 min per muscle</strong></li>
+                                <li>Yoga or guided mobility: <strong>5–10 min</strong></li>
                               </ul>
                             </div>
                             <div className="text-xs text-gray-500 mt-2">
@@ -945,39 +940,28 @@ export default function NeuriskApp() {
                               <strong>Objective:</strong> Mitigate injury risk, address deficits, and ensure safe return to play.
                             </div>
                             <div>
-                              <strong>Recommended Interventions:</strong>
-                              <ul className="list-disc list-inside ml-4">
-                                <li>Supervised rehabilitation with a physiotherapist.</li>
-                                <li>Individualized corrective exercise program.</li>
-                                <li>Gradual return-to-play protocol.</li>
+                              <strong>Warm-up (20 min, supervised):</strong>
+                              <ul className="list-disc ml-6">
+                                <li>Isokinetic leg curls: <strong>3 sets × 10 reps</strong></li>
+                                <li>Balance board proprioceptive training: <strong>3 sets × 1 min each leg</strong></li>
+                                <li>Side planks (glute/core activation): <strong>3 sets × 30s each side</strong></li>
+                                <li>Clamshells: <strong>3 sets × 15 reps each side</strong></li>
                               </ul>
                             </div>
                             <div>
-                              <strong>Specific Training Regime:</strong>
-                              <ul className="list-disc list-inside ml-4">
-                                <li>
-                                  <strong>Before Practice:</strong>
-                                  <ul className="list-disc ml-6">
-                                    <li>20 min supervised rehab warm-up: isokinetic strengthening (e.g., isokinetic leg curls, 3×10 reps), proprioceptive retraining (balance board, 3×1 min), glute/core activation (side planks, 3×30s/side)</li>
-                                    <li>Corrective exercises: single-leg bridges (3×12 reps), clamshells (3×15 reps/side)</li>
-                                  </ul>
-                                </li>
-                                <li>
-                                  <strong>During Practice:</strong>
-                                  <ul className="list-disc ml-6">
-                                    <li>Modified or limited participation in team drills</li>
-                                    <li>Focus on technique and low-intensity skill work</li>
-                                    <li>Continue supervised rehab exercises as tolerated</li>
-                                  </ul>
-                                </li>
-                                <li>
-                                  <strong>After Practice:</strong>
-                                  <ul className="list-disc ml-6">
-                                    <li>Extended cool-down with static stretching and foam rolling (3 min per muscle)</li>
-                                    <li>Physiotherapist-guided recovery (manual therapy, modalities as needed)</li>
-                                    <li>Education session on injury prevention and self-monitoring</li>
-                                  </ul>
-                                </li>
+                              <strong>Main Session:</strong>
+                              <ul className="list-disc ml-6">
+                                <li>Single-leg bridges: <strong>3 sets × 12 reps</strong></li>
+                                <li>Step-downs: <strong>3 sets × 10 reps each leg</strong></li>
+                                <li>Modified team drills (as tolerated, focus on technique)</li>
+                              </ul>
+                            </div>
+                            <div>
+                              <strong>Cool-down (15 min):</strong>
+                              <ul className="list-disc ml-6">
+                                <li>Extended static stretching and foam rolling: <strong>3 min per muscle</strong></li>
+                                <li>Physiotherapist-guided recovery (manual therapy, modalities as needed)</li>
+                                <li>Education on injury prevention and self-monitoring</li>
                               </ul>
                             </div>
                             <div className="text-xs text-gray-500 mt-2">
